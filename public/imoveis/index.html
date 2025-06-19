@@ -37,33 +37,36 @@
         </section>
       </div>
 
-      <div class="info-principal">
-        <h2>Casa com garagem</h2>
-        <p class="localizacao">📍 Ponta Porã - MS</p>
-        <p class="tipo-imovel">🏠 Casa</p>
-        <p class="preco">R$ 1.200,00 / mês</p>
+      <div class="texto-detalhes">
+        <div class="info-principal">
+          <h2>Casa com garagem</h2>
+          <p class="localizacao">📍 Ponta Porã - MS</p>
+          <p class="tipo-imovel">🏠 Casa</p>
+          <p class="preco">R$ 1.200,00 / mês</p>
 
-        <div class="contato">
-          <p>📞 <a href="tel:+559999999999">+55 99 99999-9999</a></p>
-          <p>✉️ <a href="mailto:contato@imoveis.com">contato@imoveis.com</a></p>
-          <button class="btn-mensagem">Enviar mensagem</button>
+          <div class="contato">
+            <p>📞 <a href="tel:+559999999999">+55 99 99999-9999</a></p>
+            <p>✉️ <a href="mailto:contato@imoveis.com">contato@imoveis.com</a></p>
+            <button class="btn-mensagem">Enviar mensagem</button>
+          </div>
         </div>
+
+        <section class="descricao-detalhes">
+          <h3>Detalhes do imóvel</h3>
+          <p>Casa ampla com 3 quartos, 2 banheiros, cozinha planejada, sala de estar, quintal com garagem para 2 carros. Área total: 120m².</p>
+
+          <ul class="detalhes-lista">
+            <li>🛏️ 3 Quartos</li>
+            <li>🛁 2 Banheiros</li>
+            <li>🍽️ Cozinha planejada</li>
+            <li>🚗 Garagem para 2 carros</li>
+            <li>🌳 Quintal espaçoso</li>
+          </ul>
+        </section>
       </div>
 
     </section>
 
-    <section class="descricao-detalhes">
-      <h3>Detalhes do imóvel</h3>
-      <p>Casa ampla com 3 quartos, 2 banheiros, cozinha planejada, sala de estar, quintal com garagem para 2 carros. Área total: 120m².</p>
-
-      <ul class="detalhes-lista">
-        <li>🛏️ 3 Quartos</li>
-        <li>🛁 2 Banheiros</li>
-        <li>🍽️ Cozinha planejada</li>
-        <li>🚗 Garagem para 2 carros</li>
-        <li>🌳 Quintal espaçoso</li>
-      </ul>
-    </section>
 
     <section class="mapa">
       <h3>Localização</h3>
@@ -87,19 +90,56 @@
     </div>
   </footer>
 
+  <div id="lightbox" class="lightbox">
+    <button class="close">&times;</button>
+    <button class="arrow prev">&#10094;</button>
+    <img src="../uploads/casa.jpg" alt="Imagem ampliada" />
+    <button class="arrow next">&#10095;</button>
+  </div>
+
+
 
 
   <script>
     const miniaturas = document.querySelectorAll('.miniaturas img');
     const imagemPrincipal = document.querySelector('.imagem-principal img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const prevBtn = lightbox.querySelector('.prev');
+    const nextBtn = lightbox.querySelector('.next');
+    const closeBtn = lightbox.querySelector('.close');
 
-    miniaturas.forEach(mini => {
+    const imagens = Array.from(miniaturas).map(img => img.src);
+    let indexAtual = 0;
+
+    miniaturas.forEach((mini, index) => {
       mini.addEventListener('click', () => {
         imagemPrincipal.src = mini.src;
+        indexAtual = index;
         miniaturas.forEach(i => i.classList.remove('active'));
         mini.classList.add('active');
       });
     });
+
+    imagemPrincipal.addEventListener('click', () => {
+      lightboxImg.src = imagens[indexAtual];
+      lightbox.classList.add('open');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      lightbox.classList.remove('open');
+    });
+
+    function mostrarImagem(novoIndice) {
+      indexAtual = (novoIndice + imagens.length) % imagens.length;
+      lightboxImg.src = imagens[indexAtual];
+      imagemPrincipal.src = imagens[indexAtual];
+      miniaturas.forEach(i => i.classList.remove('active'));
+      miniaturas[indexAtual].classList.add('active');
+    }
+
+    prevBtn.addEventListener('click', () => mostrarImagem(indexAtual - 1));
+    nextBtn.addEventListener('click', () => mostrarImagem(indexAtual + 1));
   </script>
 
 </body>
